@@ -710,7 +710,8 @@
     } else {
         filename = [asset valueForKey:@"filename"];
     }
-    filename = [NSString stringWithFormat:@"%@_%@%@_%@", id, modifiedDate, isOrigin ? @"_o" : @"", filename];
+//    filename = [NSString stringWithFormat:@"%@_%@%@_%@", id, modifiedDate, isOrigin ? @"_o" : @"", filename];
+    filename = [NSString stringWithFormat:@"%@%@", isOrigin ? @"" : @"p_", filename];
     NSString *typeDirPath;
     if (resource) {
         typeDirPath = resource.isImage ? PM_IMAGE_CACHE_PATH : PM_VIDEO_CACHE_PATH;
