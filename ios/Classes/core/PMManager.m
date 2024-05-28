@@ -702,7 +702,7 @@
                           manager:(NSFileManager *)manager {
     NSString *id = [asset.localIdentifier stringByReplacingOccurrencesOfString:@"/" withString:@"_"];
     NSString *modifiedDate = [NSString stringWithFormat:@"%f", asset.modificationDate.timeIntervalSince1970];
-    NSString *homePath = NSTemporaryDirectory();
+    NSString *homePath = [self cacheDir];
     NSMutableString *path = [NSMutableString stringWithString:homePath];
     NSString *filename;
     if (resource) {
@@ -1404,8 +1404,12 @@
     return YES;
 }
 
+- (NSString *)cacheDir {
+    return NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES).firstObject;
+}
+
 - (NSString *)getCachePath:(NSString *)type {
-    NSString *homePath = NSTemporaryDirectory();
+    NSString *homePath = [self cacheDir];
     NSString *cachePath = type;
     NSString *dirPath = [NSString stringWithFormat:@"%@%@", homePath, cachePath];
     return dirPath;
