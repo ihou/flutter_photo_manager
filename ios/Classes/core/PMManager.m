@@ -703,7 +703,6 @@
     NSString *id = [asset.localIdentifier stringByReplacingOccurrencesOfString:@"/" withString:@"_"];
     NSString *modifiedDate = [NSString stringWithFormat:@"%f", asset.modificationDate.timeIntervalSince1970];
     NSString *homePath = [self cacheDir];
-    NSMutableString *path = [NSMutableString stringWithString:homePath];
     NSString *filename;
     if (resource) {
         filename = resource.originalFilename;
@@ -718,12 +717,12 @@
     } else {
         typeDirPath = asset.isImage ? PM_IMAGE_CACHE_PATH : PM_VIDEO_CACHE_PATH;
     }
-    NSString *dirPath = [NSString stringWithFormat:@"%@%@", homePath, typeDirPath];
+    NSString *dirPath = [homePath stringByAppendingPathComponent:typeDirPath];
     if (manager == nil) {
         manager = NSFileManager.defaultManager;
     }
     [manager createDirectoryAtPath:dirPath withIntermediateDirectories:true attributes:@{} error:nil];
-    [path appendFormat:@"%@/%@", typeDirPath, filename];
+    NSString *path = [dirPath stringByAppendingPathComponent:filename];
     [PMLogUtils.sharedInstance info:[NSString stringWithFormat:@"PHAsset path = %@", path]];
     return path;
 }
@@ -1411,7 +1410,7 @@
 - (NSString *)getCachePath:(NSString *)type {
     NSString *homePath = [self cacheDir];
     NSString *cachePath = type;
-    NSString *dirPath = [NSString stringWithFormat:@"%@%@", homePath, cachePath];
+    NSString *dirPath = [homePath stringByAppendingPathComponent:cachePath];
     return dirPath;
 }
 
