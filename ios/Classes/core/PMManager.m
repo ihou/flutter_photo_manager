@@ -703,12 +703,18 @@
     NSString *id = [asset.localIdentifier stringByReplacingOccurrencesOfString:@"/" withString:@"_"];
     NSString *modifiedDate = [NSString stringWithFormat:@"%f", asset.modificationDate.timeIntervalSince1970];
     NSString *homePath = [self cacheDir];
+
     NSString *filename;
     if (resource) {
-        filename = resource.originalFilename;
-    } else {
+        PHAssetResource *re = [PHAssetResource assetResourcesForAsset:asset].firstObject;
+        NSString *name = [re.originalFilename stringByDeletingPathExtension];
+        NSString *extension = [resource.originalFilename pathExtension];
+        filename = [NSString stringWithFormat:@"%@.%@", name, extension];
+    }
+    if (filename.length == 0) {
         filename = [asset valueForKey:@"filename"];
     }
+
 //    filename = [NSString stringWithFormat:@"%@_%@%@_%@", id, modifiedDate, isOrigin ? @"_o" : @"", filename];
     filename = [NSString stringWithFormat:@"%@%@", isOrigin ? @"" : @"p_", filename];
     NSString *typeDirPath;
